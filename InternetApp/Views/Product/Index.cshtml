@@ -1,0 +1,171 @@
+﻿@model IEnumerable<InternetApp.Models.Product>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    TimeSpan Date;
+    TimeSpan Minutes = new TimeSpan(2010, 8, 18, 13, 30);
+    TimeSpan Hours = new TimeSpan(24);
+}
+
+<div class="container">
+    <h2>Home</h2>
+    <p>
+        <button type="button" class="btn btn-warning showcart" data-toggle="modal" data-target="#exampleModal">Cart </button>
+       
+        @Html.ActionLink("Add Product", "New", new { }, new { @class = "btn", @style = "width:100px;background-color:hsla(9, 100%, 64%, 0.5);color:rgb(0,0,0)" })
+    </p>
+    @using (Html.BeginForm("Index", "Product", FormMethod.Post))
+    {
+
+     // <input class="form-control" placeholder="Search.." name="searchfield" />
+      @Html.TextBox("name", null, new { @class = "form-control", @placeHolder = "Search.." })
+        <br />
+        <input type="submit" value="Search" id=" txtsearch" style="width:100px;background-color:hsla(9, 100%, 64%, 0.5);color:rgb(0,0,0) ;" class="btn " />
+    }
+    <br />
+</div>
+
+<div class="container">
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-xl-2 col-lg-2 col-md-3 col-sm-6 col-xs-6">
+                <div class="card" style="width: 18rem;">
+                    <h3 class="card-title item-name">@Html.DisplayFor(modelItem => item.name)</h3>
+                    <img src="~/images/products/@item.image" class="img-responsive" alt="Image">
+                    <div class="card-body">
+                        <p>@Html.DisplayFor(modelItem => item.description)</p>
+                        <h4 class="item-price">Price:@Html.DisplayFor(modelItem => item.price)</h4>
+                        @Html.ActionLink("Details", "Details", new { id = item.id }, new { @class = "btn btn-danger", @style = "width:70px;background-color:rgb(60, 60, 60) " })
+                        <a class="btn btn-success" onclick="myaddtocart(@item.id)"  >Add to cart</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="list">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body " id="mymodalBodyDiv">
+               
+                    
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    @Scripts.Render("~/bundles/jquery")
+
+    <script src="~/Scripts/bootstrap.min.js"></script>
+
+    <script type="text/javascript">
+        
+        @*$(function () {
+            $("#txtsearch").autocomplete(
+                {
+                    source: function (request, response) {
+                        $.ajax({
+                            url: '@Url.Action("GetCategoryName", "Product")',
+                            dataType: "json",
+                            data: { term: $("#txtsearch").val() },
+                            success: function (data) {
+                                response($.map(data, function (item) {
+                                    return item;
+                                }))
+
+                            },
+
+                        });
+                    },
+                    minLength: 1
+                });
+        });*@
+
+
+       
+
+        var myaddtocart = function (productid) {
+            $.ajax({
+                method: 'POST',
+                url: "/Cart/addtocart",
+                data: { "Productid": productid },
+                success: function (res) {
+                  
+                },
+                error: function (res) {
+                    alert("something wrong" + msg);
+                }
+            });
+        }
+
+        var deletethisproduct = function (productid) {
+                $.ajax({
+                    method: 'POST',
+                    url: "/Cart/deletecart",
+                    data: { "id": productid },
+                    success: function (data) {
+
+                        $.ajax({
+                            method: 'GET',
+                            url: "/Cart/Index",
+                            success: function (res) {
+                                ;
+                                $("#mymodalBodyDiv").html(res);
+                            },
+                            error: function (msg) {
+                                alert("something wrong" + msg);
+                            }
+
+                        });
+                    },
+                    error: function (msg) {
+                        alert("something wrong" + msg);
+                    }
+                });
+            }
+
+        $(".showcart").click(function (){
+            $.ajax({
+                method: 'GET',
+                url: "/Cart/Index",
+                success: function (res) {;
+                   $("#mymodalBodyDiv").html(res);
+                },
+                error: function (msg) {
+                    alert("something wrong" + msg);
+                }
+
+            });
+        })
+
+
+        $('[data-toggle="popover"]').popover({
+            placement: 'right',
+        });
+
+        $('[data-toggle="popover"]').click(function () {
+
+            setTimeout(function () {
+                $('.popover').fadeOut('slow');
+            }, 2000);
+
+        });
+        
+    </script>
+}

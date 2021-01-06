@@ -1,0 +1,35 @@
+﻿@model InternetApp.ViewModel.ProductCategoryModel
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details Of Product</h2>
+
+
+    
+    <hr />
+    <div class="col-lg-4 col-md-6 col-sm-12 center-block">
+        <div class="panel panel-primary">
+            <div class="panel-heading"> </div>
+            <div class="panel-body" >
+                <h3> @Html.DisplayFor(modelItem => Model.Product.name)-@Html.DisplayFor(modelItem => Model.Product.price) (@Html.DisplayFor(modelItem => Model.Product.Category.name))</h3>
+                <img src="~/images/products/@Model.Product.image" class="img-responsive" style="height:90%; width:100% " alt="Image">
+
+
+                <p>@Html.DisplayFor(modelItem => Model.Product.name) is @Html.DisplayFor(modelItem => Model.Product.description)</p>
+
+            </div>
+            <div class="panel-footer">
+                <div style="margin-bottom:4px">
+                    @Html.ActionLink("Edit", "Edit", new { id = Model.Product.id }, new { @class = "btn btn-danger", @style = "width:70px;background-color:rgb(60, 60, 60) " })
+                    @Html.ActionLink("Delete", "Delete", new { id = Model.Product.id }, new { @class = "btn btn-danger", @style = "width:90px;background-color:rgb(60, 60, 60)" })
+                </div>
+
+                
+                @Html.ActionLink("Back to List", "Index",new { } ,new { @class = "btn btn-danger", @style = "width:100px;background-color:rgb(60, 60, 60)" })
+            </div>
+        </div>
+        </div>
+

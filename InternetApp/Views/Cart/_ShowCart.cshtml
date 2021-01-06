@@ -1,0 +1,58 @@
+﻿@model IEnumerable<InternetApp.Models.Cart>
+@{
+    TimeSpan Date;
+    TimeSpan Minutes = new TimeSpan(2010, 8, 18, 13, 30);
+    TimeSpan Hours = new TimeSpan(24);
+}
+<table class="table" style="width:500px " id="myt">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.product.name)
+        </th>
+        <th>@Html.DisplayNameFor(model => model.product.price)</th>
+        <th>Date</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.product.name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.product.price)
+            </td>
+            @{
+                Date = DateTime.Now - item.added_at;
+            }
+        <td>
+            @{ if (Date.TotalMinutes >= 0 && Date.TotalMinutes < 60)
+                {
+                    @Date.Minutes <span> minutes ago</span>
+                }
+                else if (Date.TotalMinutes >= 60 && Date.TotalMinutes < 1440)
+                {
+                    if ( Date.TotalMinutes < 120)
+                    {
+                        <span>1 hour ago</span>
+                    }
+                    else 
+                    { @Date.Hours <span> hours ago</span>}
+
+                }
+                else
+                {
+                    if (Date.TotalMinutes < 2880)
+                    {
+                        <span>1 day ago</span>
+                    }
+                    else 
+                    { @Date.Days <span> days ago</span>}
+                }
+            }
+        </td>
+            <td>
+                <a class="btn btn-danger delete"  onclick="deletethisproduct(@item.product_id)">Delete </a>
+            </td>
+        </tr>
+    }
+</table>

@@ -1,0 +1,26 @@
+﻿@model IEnumerable<InternetApp.Models.Category>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+    <div>
+        <h2>Categories</h2>
+        <p>
+            @Html.ActionLink("Add Category", "Create", new { }, new { @class = "btn btn-danger", @style = "width:120px;background-color:rgb(60, 60, 60) " })
+        </p>
+    </div>
+
+    <div >
+        @foreach (var item in Model)
+        {
+
+
+            <ul class="list-group" style="width:300px">
+                <li class="list-group-item">@Html.DisplayFor(modelItem => item.name)<span class="badge">@Html.ActionLink("Delete", "Delete", new { id = item.id })</span><span class="badge">@Html.ActionLink("Update", "Edit", new { id = item.id })</span><span class="badge"> @Html.DisplayFor(modelItem => item.number_of_products)</span> </li>
+            </ul>
+
+        }
+    </div>
+
+
